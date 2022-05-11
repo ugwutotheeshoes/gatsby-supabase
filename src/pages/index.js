@@ -1,6 +1,8 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { Image, CloudinaryContext } from "cloudinary-react";
 import "../styles/global.css";
+import { useInView } from "react-intersection-observer";
+import { supabase } from "./supabase";
 
 // styles
 // const pageStyles = {
@@ -134,6 +136,7 @@ const links = [
 
 // markup
 const IndexPage = () => {
+  const [toggle, setToggle] = useState(false);
   return (
     <main className="container">
       <title>Track Image impressions in Gatsby.js with Supabase</title>
@@ -152,9 +155,22 @@ const IndexPage = () => {
       ))}
 
       <CloudinaryContext cloud_name="ugwutotheeshoes">
-        <div className="image-container">
-          <Image publicId="eatery/item-3.jpg" width="300px" height="400px" />
-        </div>
+        <InView threshold={0.6}>
+          {({ ref, inView }) => (
+            <div className="image-container" ref={ref}>
+              <Image
+                publicId="eatery/item-3.jpg"
+                width="300px"
+                height="400px"
+              />
+              <p
+                className={`text-white text-2xl font-bold ${
+                  inView ? "color: green" : "color : red"
+                }`}
+              >{`Image in view? ${inView} `}</p>
+            </div>
+          )}
+        </InView>
       </CloudinaryContext>
 
       {Array.from(Array(8).keys()).map((i) => (
