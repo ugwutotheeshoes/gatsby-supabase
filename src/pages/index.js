@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Image, CloudinaryContext } from "cloudinary-react";
 import "../styles/global.css";
-import { useInView } from "react-intersection-observer";
+import { InView } from "react-intersection-observer";
 import { supabase } from "./supabase";
 
 // styles
@@ -136,7 +136,7 @@ const links = [
 
 // markup
 const IndexPage = () => {
-  const [toggle, setToggle] = useState(false);
+  const [toggle, setToggle] = useState(false)
   return (
     <main className="container">
       <title>Track Image impressions in Gatsby.js with Supabase</title>
