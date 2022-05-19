@@ -1,30 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Image, CloudinaryContext } from "cloudinary-react";
 import "../styles/global.css";
 import { InView } from "react-intersection-observer";
-import { supabase } from "./supabase";
-// import { from } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
-function ImpressionCounter(inView, count, setCount) {
-  if (inView) {
-    setCount(count + 1);
-    console.log(count);
-    endFunction();
-  }
-}
 
-const endFunction = async () => {
-  // const { data, error } = await supabase.rpc("increment", { row_id: 1 });
-  // console.log('yeahhhhh')
-  const { data, error } = await supabase
-    .from("pages")
-    .update({ name: "Mordor" })
-    .eq("name", "Image impression");
-};
-
-// markup
 const IndexPage = () => {
+  function counter(inView, count, setCount) {
+    if (inView) {
+      setCount(count + 1);
+      console.log(count);
+      endFunction();
+    }
+  }
   const [count, setCount] = useState(1);
+  const supabase = createClient('https://fqsvpneuxkgvripbrzdf.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxc3ZwbmV1eGtndnJpcGJyemRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NTIzMDI4ODQsImV4cCI6MTk2Nzg3ODg4NH0.zjYvNm6RRfEFqc2Ei13mKbDKuNJ5V1q6WIaRQgL8STQ');
+  const endFunction = async ( ) => {
+    const { data, error } = await supabase.rpc("increment", { row_id: 1 });
+  };
 
   return (
     <main className="container">
@@ -46,7 +39,7 @@ const IndexPage = () => {
       <CloudinaryContext cloud_name="ugwutotheeshoes">
         <InView
           threshold={0.6}
-          onChange={(inView) => ImpressionCounter(inView, count, setCount)}
+          onChange={(inView) => counter(inView, count, setCount)}
         >
           {({ ref }) => (
             <div className="image-container" ref={ref}>
@@ -66,6 +59,9 @@ const IndexPage = () => {
         </InView>
       </CloudinaryContext>
 
+      {/* <pre>{JSON.stringify(data, null, 4)}</pre> */}
+
+
       {Array.from(Array(8).keys()).map((i) => (
         <p key={i}>
           Irure pariatur velit est anim ipsum anim aliquip officia velit
@@ -81,3 +77,5 @@ const IndexPage = () => {
 };
 
 export default IndexPage;
+
+
